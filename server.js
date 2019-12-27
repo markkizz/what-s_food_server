@@ -6,7 +6,7 @@ const db = require('./models')
 const cors = require('cors')
 
 const app = express()
-
+const PORT = 8080;
 // import passport
 const passport = require('passport')
 
@@ -25,5 +25,5 @@ db.sequelize.sync({ force: false }).then(() => {
   //call services
   // Service(app, db);
 
-  app.listen(8080, () => console.log("Server is running on port 8080"))
+  app.listen(PORT, () => console.log("Server is running on port ${PORT}"))
 })
