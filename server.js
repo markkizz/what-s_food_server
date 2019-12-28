@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const db = require('./models');
 // services
 const userService = require('./services/user.service');
-const cors = require('cors');
+const reviewService = require('./services/review.service');
+const restaurantService = require('./services/restaurant.service');
 
 const app = express();
 const PORT = 8080;
@@ -21,9 +23,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // import config of passport
 require('./config/passport/passport');
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   // call services
   userService(app, db);
+  reviewService(app, db);
+  restaurantService(app, db);
 
   app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 });

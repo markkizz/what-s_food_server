@@ -6,25 +6,30 @@ module.exports = (app, db) => {
   app.post(
     '/review-create/:id',
     passport.authenticate('jwt', { session: false }),
-    (req, res) => {
-      const restaurantId = req.params.id;
-      const { title, content, rating, priceRange } = req.body;
+    async (req, res) => {
+      const restaurantId = Number(req.params.id);
+      const { rating, priceRange } = req.body;
+      const title = req.body.title.trim();
+      const content = req.body.content.trim();
       try {
-        const findRestaurant = db.restaurants.findOne({
+        const restaurant = await db.restaurants.findOne({
           where: { id: restaurantId }
         });
-        if (findRestaurant) {
+        if (restaurant) {
           db.reviews
             .create({
               title,
               content,
               rating,
               price_range: priceRange,
-              user_like: 0
+              user_like: 0,
+              user_id: req.user.id,
+              restaurant_id: restaurantId
             })
             .then(() =>
-              res.send(201).json({ message: 'create review success' })
-            );
+              res.status(201).json({ message: 'create review success' })
+            )
+            .catch(error => console.error('reviews error: ', error));
         } else {
           res.status(400).json({ message: 'Restaurant not found' });
         }

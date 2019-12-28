@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     users.belongsToMany(models.restaurants, {
       onDelete: 'CASCADE',
       foreignKey: 'user_id',
-      through: models.reviews
+      through: { model: models.reviews, unique: false }
     });
     // user.belongsToMany(user, { as: 'request_from', foreignKey: 'request_from_id', through: models.friend })
   };

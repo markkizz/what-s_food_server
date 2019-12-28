@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
     user_like: {
       type: DataTypes.INTEGER
     },
+    rating: {
+      type: DataTypes.FLOAT(2)
+    },
+    total_review: {
+      type: DataTypes.INTEGER
+    },
     image_url: {
       type: DataTypes.STRING(100)
     }
@@ -36,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     restaurants.belongsToMany(models.users, {
       onDelete: 'CASCADE',
       foreignKey: 'restaurant_id',
-      through: models.reviews
+      through: { model: models.reviews, unique: false }
     });
   };
   return restaurants;
