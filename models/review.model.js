@@ -1,5 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const review = sequelize.define('review', {
+  const reviews = sequelize.define('reviews', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+      unique: true
+    },
     title: {
       type: DataTypes.STRING(150)
     },
@@ -15,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     user_like: {
       type: DataTypes.STRING(500)
     }
-  })
+  });
 
-  review.associate = (models) => {
+  // reviews.associate = (models) => {
 
-  }
-  return review
-}
+  // }
+  return reviews;
+};
