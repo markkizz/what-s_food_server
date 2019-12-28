@@ -5,7 +5,8 @@
     "database": "What's_food",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "salt_length": 12
   },
   "test": {
     "username": "root",
