@@ -39,10 +39,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   restaurants.associate = models => {
-    restaurants.belongsToMany(models.users, {
-      onDelete: 'CASCADE',
-      foreignKey: 'restaurant_id',
-      through: { model: models.reviews, unique: false }
+    restaurants.hasMany(models.reviews, {
+      foreignKey: 'restaurant_id'
     });
   };
   return restaurants;

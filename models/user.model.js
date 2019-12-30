@@ -6,9 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING(255)
     },
-    email: {
-      type: DataTypes.STRING(100)
-    },
     first_name: {
       type: DataTypes.STRING(100)
     },
@@ -28,10 +25,8 @@ module.exports = (sequelize, DataTypes) => {
 
   users.associate = models => {
     // user.hasMany(models.comment, { onDelete: 'CASCADE', foreignKey: 'user_id' })
-    users.belongsToMany(models.restaurants, {
-      onDelete: 'CASCADE',
-      foreignKey: 'user_id',
-      through: { model: models.reviews, unique: false }
+    users.hasMany(models.reviews, {
+      foreignKey: 'user_id'
     });
     // user.belongsToMany(user, { as: 'request_from', foreignKey: 'request_from_id', through: models.friend })
   };

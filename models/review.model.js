@@ -22,8 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  // reviews.associate = (models) => {
-
-  // }
+  // reviews.associate = models => {
+  //   reviews.belongTo(models.restaurants, {
+  //     foreignKey: ''
+  //   });
+  // };
   return reviews;
 };

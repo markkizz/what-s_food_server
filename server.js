@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // import config of passport
 require('./config/passport/passport');
 
-db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ force: true }).then(() => {
   // call services
   userService(app, db);
   reviewService(app, db);

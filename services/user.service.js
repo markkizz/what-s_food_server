@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const config = require('../config/passport/passport');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 
 module.exports = (app, db) => {
   app.post('/userRegistation', (req, res, next) => {
@@ -12,7 +12,7 @@ module.exports = (app, db) => {
       }
       if (info !== undefined) {
         console.error(info.message);
-        res.status(403).send(info.message);
+        res.status(409).send(info.message);
       } else {
         db.users
           .findOne({
@@ -46,8 +46,8 @@ module.exports = (app, db) => {
     passport.authenticate('login', (err, user, info) => {
       // error handle
       if (err) console.error(`error ${err}`);
-      if (info !== undefined) {
-        console.error(' ❌ :: ', info.message);
+      if (info) {
+        console.error(' ❌ :: ', info);
         if (info.message === 'username not found') {
           res.status(401).send(info.message);
         } else {
@@ -66,9 +66,11 @@ module.exports = (app, db) => {
             const token = jwt.sign(
               {
                 id: userFound.id,
+                username: userFound.username,
+                first_name: userFound.first_name,
+                last_name: userFound.last_name,
                 role: userFound.role,
-                name: userFound.name,
-                profilePic: userFound.profile_img_url
+                profileImg: userFound.profile_img_url
               },
               config.jwtOptions.secretOrKey,
               {
