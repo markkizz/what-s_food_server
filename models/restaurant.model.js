@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     image_url: {
-      type: DataTypes.STRING(100)
+      type: DataTypes.STRING(1000)
     }
   });
 

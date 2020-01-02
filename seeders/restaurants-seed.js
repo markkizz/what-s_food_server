@@ -16,7 +16,8 @@ module.exports = {
           user_like: 1000,
           rating: 4.5,
           total_review: 456,
-          image_url: 'http://meanmean',
+          image_url:
+            'https://images.unsplash.com/photo-1525610553991-2bede1a236e2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -33,7 +34,8 @@ module.exports = {
           user_like: 1000,
           rating: 4.5,
           total_review: 456,
-          image_url: 'http://restaurantname',
+          image_url:
+            'https://images.unsplash.com/photo-1566830646346-908d87490bba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -50,7 +52,8 @@ module.exports = {
           user_like: 1000,
           rating: 4.5,
           total_review: 456,
-          image_url: 'http://namename',
+          image_url:
+            'https://images.unsplash.com/photo-1485182708500-e8f1f318ba72?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1385&q=80',
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -67,7 +70,8 @@ module.exports = {
           user_like: 1000,
           rating: 4.5,
           total_review: 456,
-          image_url: 'http://meanmean',
+          image_url:
+            'https://images.unsplash.com/photo-1569185115737-e027065f7bc8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1281&q=80',
           createdAt: new Date(),
           updatedAt: new Date()
         }
