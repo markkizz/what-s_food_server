@@ -14,12 +14,21 @@ module.exports = (app, db) => {
     }
   });
 
-  app.get('/searchRestaurant/:restaurantName/:district*?', async (req, res) => {
-    const { restaurantName, district } = req.params;
+  app.get('/searchRestaurant/:district', async (req, res) => {
+    const { district } = req.params;
+    const { q } = req.query;
+    let findRestaurant;
     try {
-      const findRestaurant = await db.restaurants.findAll({
-        where: { [Op.or]: [{ name: restaurantName }, { district }] }
-      });
+      if (!q) {
+        findRestaurant = await db.restaurants.findAll({ where: { district } });
+      } else {
+        findRestaurant = await db.restaurants.findAll({
+          where: { [Op.or]: [{ name: { [Op.like]: `%${q}%` } }, { district }] }
+        });
+      }
+      if (!findRestaurant) {
+        throw new Error('can not find restaurant');
+      }
       res.status(200).send(findRestaurant);
     } catch (err) {
       console.error(' ❌ ::  ', err);
