@@ -1,4 +1,4 @@
-const passport = require('passport');
+// const passport = require('passport');
 const Sequelize = require('sequelize');
 
 const { Op } = Sequelize;
@@ -14,21 +14,27 @@ module.exports = (app, db) => {
     }
   });
 
+  /**
+   * cuisine = [key1, key2 ,key3, ...]
+   * district = [key1, key2 ,key3, ...]
+   * price range = [$$, $$$$]
+   */
+
   app.get('/searchRestaurant', async (req, res) => {
-    const { district, keyword } = req.query;
+    const { district, keyword, q } = req.query;
     console.log(district, keyword);
     console.log(req.query);
     let findRestaurant;
     try {
-      if (!keyword) {
+      if (!keyword && district) {
         findRestaurant = await db.restaurants.findAll({ where: { district } });
-      } else if (keyword && !district) {
+      } else if (q && !keyword && !district) {
         findRestaurant = await db.restaurants.findAll({
           where: {
             [Op.or]: [
-              { name: { [Op.like]: `%${keyword}%` } },
-              { district: { [Op.like]: `%${keyword}%` } },
-              { cuisine: { [Op.like]: `%${keyword}%` } }
+              { name: { [Op.like]: `%${q}%` } },
+              { district: { [Op.like]: `%${q}%` } },
+              { cuisine: { [Op.like]: `%${q}%` } }
             ]
           }
         });
@@ -46,6 +52,32 @@ module.exports = (app, db) => {
     } catch (err) {
       console.error(' ❌ ::  ', err);
       res.status(400).json({ message: 'restaurant not found' });
+    }
+  });
+
+  app.get('/filterRestaurant/', async (req, res) => {
+    const { price_range } = req.query;
+    const queryObj = JSON.parse(JSON.stringify(req.query));
+    delete queryObj.price_range;
+    Object.keys(queryObj).forEach(key => {
+      queryObj[`${key}`] = queryObj[key].split(',');
+    });
+    const dynamicWhere = op =>
+      [].concat(
+        ...Object.keys(queryObj).map(key =>
+          queryObj[key].map(keyword => ({ [key]: { [op]: `%${keyword}%` } }))
+        )
+      );
+
+    try {
+      const filterSearch = await db.restaurants.findAll({
+        where: { [Op.or]: dynamicWhere(Op.like) }
+      });
+      if (!filterSearch) res.status(400).send('cannot find restaurant');
+      res.status(200).send(filterSearch);
+    } catch (err) {
+      console.error(err);
+      res.status(400).send('not found restaurant');
     }
   });
 };
