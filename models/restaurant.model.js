@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     image_url: {
       type: DataTypes.STRING(1000)
+    },
+    description: {
+      type: DataTypes.STRING(1000)
     }
   });
 

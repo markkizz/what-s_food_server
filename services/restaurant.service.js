@@ -14,16 +14,29 @@ module.exports = (app, db) => {
     }
   });
 
-  app.get('/searchRestaurant/:district', async (req, res) => {
-    const { district } = req.params;
-    const { q } = req.query;
+  app.get('/searchRestaurant', async (req, res) => {
+    const { district, keyword } = req.query;
+    console.log(district, keyword);
+    console.log(req.query);
     let findRestaurant;
     try {
-      if (!q) {
+      if (!keyword) {
         findRestaurant = await db.restaurants.findAll({ where: { district } });
+      } else if (keyword && !district) {
+        findRestaurant = await db.restaurants.findAll({
+          where: {
+            [Op.or]: [
+              { name: { [Op.like]: `%${keyword}%` } },
+              { district: { [Op.like]: `%${keyword}%` } },
+              { cuisine: { [Op.like]: `%${keyword}%` } }
+            ]
+          }
+        });
       } else {
         findRestaurant = await db.restaurants.findAll({
-          where: { [Op.or]: [{ name: { [Op.like]: `%${q}%` } }, { district }] }
+          where: {
+            [Op.or]: [{ name: { [Op.like]: `%${keyword}%` } }, { district }]
+          }
         });
       }
       if (!findRestaurant) {
