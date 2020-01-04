@@ -14,12 +14,6 @@ module.exports = (app, db) => {
     }
   });
 
-  /**
-   * cuisine = [key1, key2 ,key3, ...]
-   * district = [key1, key2 ,key3, ...]
-   * price range = [$$, $$$$]
-   */
-
   app.get('/searchRestaurant', async (req, res) => {
     const { district, keyword, q } = req.query;
     console.log(district, keyword);
@@ -68,10 +62,22 @@ module.exports = (app, db) => {
           queryObj[key].map(keyword => ({ [key]: { [op]: `%${keyword}%` } }))
         )
       );
-
+    let priceRangeParse;
+    let objWhere;
+    if (price_range) {
+      priceRangeParse = price_range.split(',');
+      objWhere = {
+        [Op.or]: dynamicWhere(Op.like),
+        price_range: { [Op.between]: priceRangeParse }
+      };
+    } else {
+      objWhere = {
+        [Op.or]: dynamicWhere(Op.like)
+      };
+    }
     try {
       const filterSearch = await db.restaurants.findAll({
-        where: { [Op.or]: dynamicWhere(Op.like) }
+        where: objWhere
       });
       if (!filterSearch) res.status(400).send('cannot find restaurant');
       res.status(200).send(filterSearch);
