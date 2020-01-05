@@ -51,6 +51,8 @@ module.exports = (app, db) => {
 
   app.get('/filterRestaurant/', async (req, res) => {
     const { price_range } = req.query;
+    const priceRangeParse = price_range.split(',');
+
     const queryObj = JSON.parse(JSON.stringify(req.query));
     delete queryObj.price_range;
     Object.keys(queryObj).forEach(key => {
@@ -62,22 +64,12 @@ module.exports = (app, db) => {
           queryObj[key].map(keyword => ({ [key]: { [op]: `%${keyword}%` } }))
         )
       );
-    let priceRangeParse;
-    let objWhere;
-    if (price_range) {
-      priceRangeParse = price_range.split(',');
-      objWhere = {
-        [Op.or]: dynamicWhere(Op.like),
-        price_range: { [Op.between]: priceRangeParse }
-      };
-    } else {
-      objWhere = {
-        [Op.or]: dynamicWhere(Op.like)
-      };
-    }
     try {
       const filterSearch = await db.restaurants.findAll({
-        where: objWhere
+        where: {
+          [Op.or]: dynamicWhere(Op.like),
+          price_range: { [Op.between]: priceRangeParse }
+        }
       });
       if (!filterSearch) res.status(400).send('cannot find restaurant');
       res.status(200).send(filterSearch);
