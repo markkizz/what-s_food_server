@@ -1,5 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-  const review = sequelize.define('review', {
+  const reviews = sequelize.define('reviews', {
+    id: {
+      type: DataTypes.INTEGER(20),
+      primaryKey: true,
+      autoIncrement: true
+    },
     title: {
       type: DataTypes.STRING(150)
     },
@@ -15,10 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     user_like: {
       type: DataTypes.STRING(500)
     }
-  })
+  });
 
-  review.associate = (models) => {
-
-  }
-  return review
-}
+  // reviews.associate = models => {
+  //   reviews.belongTo(models.restaurants, {
+  //     foreignKey: ''
+  //   });
+  // };
+  return reviews;
+};

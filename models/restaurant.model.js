@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const restaurant = sequelize.define('restaurant', {
+  const restaurants = sequelize.define('restaurants', {
     name: {
       type: DataTypes.STRING(255)
     },
@@ -27,14 +27,24 @@ module.exports = (sequelize, DataTypes) => {
     user_like: {
       type: DataTypes.INTEGER
     },
-    image_url: {
-      type: DataTypes.STRING(100)
+    rating: {
+      type: DataTypes.FLOAT(2)
     },
+    total_review: {
+      type: DataTypes.INTEGER
+    },
+    image_url: {
+      type: DataTypes.STRING(1000)
+    },
+    description: {
+      type: DataTypes.STRING(1000)
+    }
+  });
 
-  })
-
-  restaurant.associate = (models) => {
-    restaurant.belongsToMany(models.user, { onDelete: 'CASCADE', as: 'user', foreignKey: 'restaurant_id', through: models.review })
-  }
-  return restaurant
-}
+  restaurants.associate = models => {
+    restaurants.hasMany(models.reviews, {
+      foreignKey: 'restaurant_id'
+    });
+  };
+  return restaurants;
+};

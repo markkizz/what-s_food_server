@@ -2,10 +2,12 @@
   "development": {
     "username": "root",
     "password": "Mark4869",
-    "database": "What's_food",
+    "database": "Whats_food",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "salt_length": 12,
+    "timezone": "Asia/Bangkok"
   },
   "test": {
     "username": "root",
