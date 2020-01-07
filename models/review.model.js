@@ -14,18 +14,15 @@ module.exports = (sequelize, DataTypes) => {
     rating: {
       type: DataTypes.FLOAT(2)
     },
-    price_range: {
-      type: DataTypes.STRING(10)
-    },
     user_like: {
       type: DataTypes.STRING(500)
     }
   });
 
-  // reviews.associate = models => {
-  //   reviews.belongTo(models.restaurants, {
-  //     foreignKey: ''
-  //   });
-  // };
+  reviews.associate = models => {
+    reviews.belongsTo(models.users, {
+      foreignKey: 'user_id'
+    });
+  };
   return reviews;
 };

@@ -1,4 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
+  // TODO: Add flied: number_pricerange, number of user rating,
+
   const restaurants = sequelize.define('restaurants', {
     name: {
       type: DataTypes.STRING(255)
@@ -23,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     price_range: {
       type: DataTypes.STRING(100)
+    },
+    price_range_number: {
+      type: DataTypes.STRING(50)
     },
     user_like: {
       type: DataTypes.INTEGER

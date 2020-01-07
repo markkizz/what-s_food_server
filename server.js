@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const passport = require('passport');
 const db = require('./models');
 // services
 const userService = require('./services/user.service');
@@ -10,7 +11,6 @@ const restaurantService = require('./services/restaurant.service');
 const app = express();
 const PORT = 8080;
 // import passport
-const passport = require('passport');
 
 // use the strategy
 app.use(passport.initialize());
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // import config of passport
 require('./config/passport/passport');
 
-db.sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ alter: false }).then(() => {
   // call services
   userService(app, db);
   reviewService(app, db);

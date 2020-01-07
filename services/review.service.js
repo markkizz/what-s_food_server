@@ -1,6 +1,7 @@
 const passport = require('passport');
+
 const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+// const Op = Sequelize.Op;
 
 module.exports = (app, db) => {
   app.post(
@@ -8,7 +9,7 @@ module.exports = (app, db) => {
     passport.authenticate('jwt', { session: false }),
     async (req, res) => {
       const restaurantId = Number(req.params.id);
-      const { rating, priceRange } = req.body;
+      const { rating } = req.body;
       const title = req.body.title.trim();
       const content = req.body.content.trim();
       try {
@@ -21,7 +22,6 @@ module.exports = (app, db) => {
               title,
               content,
               rating,
-              price_range: priceRange,
               user_like: 0,
               user_id: req.user.id,
               restaurant_id: restaurantId
@@ -39,4 +39,30 @@ module.exports = (app, db) => {
       }
     }
   );
+
+  app.get('/reviewRestaurant/:restaurantId', async (req, res) => {
+    const { restaurantId } = req.params;
+    try {
+      const userReview = await db.reviews.findAll({
+        where: { restaurant_id: restaurantId },
+        attributes: ['id', 'title', 'content', 'rating', 'user_like'],
+        include: [
+          {
+            model: db.users,
+            attributes: [
+              'id',
+              'username',
+              'first_name',
+              'last_name',
+              'profile_img_url'
+            ]
+          }
+        ]
+      });
+      res.status(200).send(userReview);
+    } catch (err) {
+      console.error(err);
+      res.status(400).send({ message: 'cannot get restaurant_review' });
+    }
+  });
 };

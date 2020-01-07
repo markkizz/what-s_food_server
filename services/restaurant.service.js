@@ -49,7 +49,7 @@ module.exports = (app, db) => {
     }
   });
 
-  app.get('/filterRestaurant/', async (req, res) => {
+  app.get('/filterRestaurant', async (req, res) => {
     const { price_range } = req.query;
     const priceRangeParse = price_range.split(',');
 
@@ -58,7 +58,7 @@ module.exports = (app, db) => {
     Object.keys(queryObj).forEach(key => {
       queryObj[`${key}`] = queryObj[key].split(',');
     });
-    const dynamicWhere = op =>
+    const dynamicOr = op =>
       [].concat(
         ...Object.keys(queryObj).map(key =>
           queryObj[key].map(keyword => ({ [key]: { [op]: `%${keyword}%` } }))
@@ -67,7 +67,7 @@ module.exports = (app, db) => {
     try {
       const filterSearch = await db.restaurants.findAll({
         where: {
-          [Op.or]: dynamicWhere(Op.like),
+          [Op.or]: dynamicOr(Op.like),
           price_range: { [Op.between]: priceRangeParse }
         }
       });
@@ -76,6 +76,18 @@ module.exports = (app, db) => {
     } catch (err) {
       console.error(err);
       res.status(400).send('not found restaurant');
+    }
+  });
+
+  app.get('/selectRestaurant/:id', async (req, res) => {
+    const id = Number(req.params.id);
+    try {
+      const restaurant = await db.restaurants.findOne({ where: { id } });
+      if (!restaurant) res.status(400).send(restaurant);
+      res.status(200).send(restaurant);
+    } catch (err) {
+      console.error(err);
+      res.status(400).send({ message: 'restaurant not found' });
     }
   });
 };
